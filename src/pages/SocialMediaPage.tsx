@@ -1,11 +1,13 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import contentManagementService from "../services/contentManagement";
 import { AnimatePresence, motion } from "framer-motion";
+import { X, ChevronLeft, ChevronRight } from "lucide-react";
 
-const SocialMediaPage = () => {
-  // ✅ Only fetch posts from Admin Panel
-  const [items, setItems] = useState([]);
+const SocialMediaPage: React.FC = () => {
+  const [items, setItems] = useState<any[]>([]);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
+  // ✅ Fetch posts from Admin Panel
   useEffect(() => {
     const fetch = () => {
       const latest = contentManagementService
@@ -22,17 +24,23 @@ const SocialMediaPage = () => {
     return () => window.removeEventListener("storage", fetch);
   }, []);
 
-  const [activeIndex, setActiveIndex] = useState(null);
-  const close = () => setActiveIndex(null);
-  const next = () =>
-    setActiveIndex((i) => (i === null ? 0 : (i + 1) % items.length));
-  const prev = () =>
-    setActiveIndex((i) =>
-      i === null ? 0 : (i - 1 + items.length) % items.length
-    );
+  // ✅ Lightbox controls
+  const close = useCallback(() => setActiveIndex(null), []);
+  const next = useCallback(
+    () => setActiveIndex((i) => (i === null ? 0 : (i + 1) % items.length)),
+    [items.length]
+  );
+  const prev = useCallback(
+    () =>
+      setActiveIndex((i) =>
+        i === null ? 0 : (i - 1 + items.length) % items.length
+      ),
+    [items.length]
+  );
 
+  // ✅ Keyboard navigation
   useEffect(() => {
-    const onKey = (e) => {
+    const onKey = (e: KeyboardEvent) => {
       if (activeIndex === null) return;
       if (e.key === "Escape") close();
       if (e.key === "ArrowRight") next();
@@ -40,7 +48,7 @@ const SocialMediaPage = () => {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [activeIndex, items.length]);
+  }, [activeIndex, close, next, prev]);
 
   return (
     <div className="min-h-screen bg-black relative overflow-hidden">
@@ -54,7 +62,7 @@ const SocialMediaPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
           <div className="flex items-center justify-between mb-8">
             <h1 className="text-white text-3xl md:text-4xl font-extrabold">
-              Social Media Post
+              Social Media Posts
             </h1>
             <a href="/portfolio" className="text-orange-400 underline">
               ← Back
@@ -118,9 +126,37 @@ const SocialMediaPage = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 backdrop-blur-sm"
-              onClick={close}
+              className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 backdrop-blur-sm"
+              role="dialog"
+              aria-modal="true"
             >
+              {/* Close button */}
+              <button
+                onClick={close}
+                className="absolute top-4 right-4 text-white bg-black/60 rounded-full p-2 hover:bg-black/80 transition"
+                aria-label="Close"
+              >
+                <X size={24} />
+              </button>
+
+              {/* Prev button */}
+              <button
+                onClick={prev}
+                className="absolute left-4 text-white bg-black/60 rounded-full p-2 hover:bg-black/80 transition"
+                aria-label="Previous"
+              >
+                <ChevronLeft size={24} />
+              </button>
+
+              {/* Next button */}
+              <button
+                onClick={next}
+                className="absolute right-4 text-white bg-black/60 rounded-full p-2 hover:bg-black/80 transition"
+                aria-label="Next"
+              >
+                <ChevronRight size={24} />
+              </button>
+
               <motion.img
                 src={items[activeIndex].image}
                 alt={items[activeIndex].title}
@@ -128,7 +164,7 @@ const SocialMediaPage = () => {
                 animate={{ scale: 1 }}
                 exit={{ scale: 0.9 }}
                 transition={{ duration: 0.3 }}
-                className="max-h-full max-w-full object-contain rounded-lg shadow-2xl"
+                className="max-h-[90vh] max-w-[90vw] object-contain rounded-lg shadow-2xl"
               />
             </motion.div>
           )}
