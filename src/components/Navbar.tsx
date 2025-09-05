@@ -243,10 +243,10 @@ const Navbar = () => {
       )}
 
       <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 relative z-10">
-        <div className="flex justify-between items-center h-16 sm:h-20 md:h-24 lg:h-24">
+        <div className="flex justify-between items-center h-20 sm:h-24 md:h-28 lg:h-28">
           {/* Enhanced Logo */}
           <motion.div 
-            className="flex-shrink-0 cursor-pointer group" 
+            className="flex-shrink-0 cursor-pointer group flex items-center" 
             onClick={handleLogoClick}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -255,7 +255,7 @@ const Navbar = () => {
               <img 
                 src={Pixel_Pulse} 
                 alt="PixelPulse Logo" 
-                className="h-16 sm:h-20 md:h-24 lg:h-24 w-auto object-contain transition-all duration-300 group-hover:drop-shadow-glow" 
+                className="block h-10 sm:h-14 md:h-18 lg:h-18 w-auto object-contain transition-all duration-300 group-hover:drop-shadow-glow" 
                 loading="eager"
                 decoding="async"
                 fetchpriority="high"

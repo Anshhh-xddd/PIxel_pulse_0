@@ -17,6 +17,8 @@ import HoldingPage from './pages/HoldingPage';
 import LogoPage from './pages/LogoPage';
 import PackagingPage from './pages/PackagingPage';
 import VisitingCardPage from './pages/VisitingCardPage';
+import SocialMediaPage from './pages/SocialMediaPage';
+import PersonalPage from './pages/PersonalPage';
 // Removed PortfolioDetailPage
 import AboutPage from './pages/AboutPage';
 import PortfolioCategoryPage from './pages/PortfolioCategoryPage';
@@ -78,9 +80,11 @@ function App() {
           <Route path="/portfolio/logo" element={<LogoPage />} />
           <Route path="/portfolio/packaging" element={<PackagingPage />} />
           <Route path="/portfolio/visiting-card" element={<VisitingCardPage />} />
+          <Route path="/portfolio/social-media" element={<SocialMediaPage />} />
           <Route path="/portfolio/category/:category" element={<PortfolioCategoryPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/personal" element={<PersonalPage />} />
           <Route path="/admin-stats" element={<AdminStatsPage />} />
           <Route path="/admin" element={<AdminPanel />} />
         </Routes>

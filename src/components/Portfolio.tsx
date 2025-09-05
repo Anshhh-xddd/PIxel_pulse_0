@@ -13,7 +13,7 @@ const holdingItems: PortfolioItem[] = sectionByCategory.holding;
 const logoItems: PortfolioItem[] = sectionByCategory.logo;
 const packagingItems: PortfolioItem[] = sectionByCategory.packaging;
 const visitingCardItems: PortfolioItem[] = sectionByCategory.visiting;
-const socialMediaItems: PortfolioItem[] = sectionByCategory['social-media'];
+const socialMediaItems: PortfolioItem[] = sectionByCategory["social-media"];
 
 const AnimatedCard = ({ item }: { item: PortfolioItem }) => {
   return (
