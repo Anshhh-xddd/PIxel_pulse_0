@@ -1,7 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Zap, Bot, Globe, Cpu, Instagram, Linkedin, Mail } from "lucide-react";
-import { motion } from "framer-motion";
+import {
+  Zap,
+  Bot,
+  Globe,
+  Cpu,
+  Instagram,
+  Linkedin,
+  Mail,
+} from "lucide-react";
+// import { motion } from "framer-motion";
 
 const About = () => {
   const navigate = useNavigate();
@@ -9,24 +17,9 @@ const About = () => {
   // Stats config: add numeric value for animation
   const stats = [
     { icon: <Bot size={24} />, number: 200, suffix: "+", label: "Designed" },
-    {
-      icon: <Zap size={24} />,
-      number: 40,
-      suffix: "+",
-      label: "Active client",
-    },
-    {
-      icon: <Globe size={24} />,
-      number: 10,
-      suffix: "+",
-      label: "Countries Deployed",
-    },
-    {
-      icon: <Cpu size={24} />,
-      number: 5,
-      suffix: "+",
-      label: "Years Of  Exprience",
-    },
+    { icon: <Zap size={24} />, number: 40, suffix: "+", label: "Active Clients" },
+    { icon: <Globe size={24} />, number: 10, suffix: "+", label: "Countries Deployed" },
+    { icon: <Cpu size={24} />, number: 5, suffix: "+", label: "Years of Experience" },
   ];
 
   // Custom hook for animated counting when in view
@@ -102,35 +95,24 @@ const About = () => {
     navigate("/about");
   };
 
-  // Removed unused handlers to satisfy lint rules
-
   return (
     <section
       id="about"
       className="py-10 sm:py-12 md:py-16 lg:py-20 xl:py-24 bg-gray-900 text-white relative overflow-hidden"
     >
-      {/* Enhanced gradient backgrounds */}
+      {/* Gradient backgrounds */}
       <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-800"></div>
       <div className="absolute inset-0 bg-gradient-to-t from-orange-500/6 via-transparent to-transparent"></div>
       <div className="absolute inset-0 bg-gradient-to-r from-orange-500/4 via-transparent to-orange-500/4"></div>
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/40 to-black"></div>
-
-      {/* Animated gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-tr from-orange-500/12 via-transparent to-orange-500/6 animate-pulse"></div>
-
-      {/* Radial gradient for depth */}
       <div className="absolute inset-0 bg-radial-gradient from-orange-500/4 via-transparent to-transparent"></div>
-
-      {/* Top fade for seamless transition from Hero */}
       <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-gray-900 to-transparent"></div>
-
-      {/* Bottom fade for seamless transition to Services */}
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-gray-900 to-transparent"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 relative z-10">
-        {/* Mobile Layout - Single Column with Optimized Content */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 md:gap-12 lg:gap-16 xl:gap-20 items-center">
-          {/* Content Section - Optimized for Mobile */}
+          {/* Content Section */}
           <div
             data-aos="fade-up"
             className="order-2 lg:order-1 text-center lg:text-left"
@@ -145,16 +127,25 @@ const About = () => {
 
             <div className="space-y-4 sm:space-y-5 md:space-y-6 lg:space-y-7 text-base sm:text-lg md:text-xl lg:text-xl xl:text-2xl text-gray-300 leading-relaxed max-w-4xl mx-auto lg:mx-0">
               <p className="font-light">
-                At PixelPulse, we are more than a design studio—we’re architects of the future. Blending AI-powered branding with intelligent visual systems, we craft experiences that think, learn, and evolve.
+                At PixelPulse, we are more than a design studio—we’re architects
+                of the future. Blending AI-powered branding with intelligent
+                visual systems, we craft experiences that think, learn, and
+                evolve.
               </p>
               <p className="font-light">
-                From Fortune 500 giants to bold startups, we design digital and physical experiences that push the boundaries of technology and aesthetics—whether for autonomous vehicles, industrial robots, or immersive brand ecosystems.
+                From Fortune 500 giants to bold startups, we design digital and
+                physical experiences that push the boundaries of technology and
+                aesthetics—whether for autonomous vehicles, industrial robots,
+                or immersive brand ecosystems.
               </p>
               <p className="font-light">
-                With 5+ years, 200+ designs, and projects across 10+ countries, PixelPulse shapes the future of human-machine interaction and digital brand experiences.
+                With 5+ years, 200+ designs, and projects across 10+ countries,
+                PixelPulse shapes the future of human-machine interaction and
+                digital brand experiences.
               </p>
               <p className="font-light">
-                PixelPulse—where AI and design converge to create the extraordinary.
+                PixelPulse—where AI and design converge to create the
+                extraordinary.
               </p>
             </div>
 
@@ -165,16 +156,10 @@ const About = () => {
               >
                 Explore Our Systems
               </button>
-              {/* <button 
-                onClick={scrollToTop}
-                className="group border-2 border-orange-500 text-orange-500 px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 text-base sm:text-lg md:text-xl font-bold hover:bg-gradient-to-r hover:from-orange-500 hover:to-red-500 hover:text-black transition-all duration-300 rounded-xl transform hover:scale-105 cursor-pointer w-full sm:w-auto"
-              >
-                Back to Top
-              </button> */}
             </div>
           </div>
 
-          {/* Stats Section - Optimized for Mobile */}
+          {/* Stats Section */}
           <div
             className="order-1 lg:order-2"
             data-aos="fade-up"
