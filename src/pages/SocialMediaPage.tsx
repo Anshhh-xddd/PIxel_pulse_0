@@ -1,11 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { PortfolioItem } from "../data/portfolio";
 import contentManagementService from "../services/contentManagement";
 import { AnimatePresence, motion } from "framer-motion";
 
-const SocialMediaPage: React.FC = () => {
+const SocialMediaPage = () => {
   // ✅ Only fetch posts from Admin Panel
-  const [items, setItems] = useState<PortfolioItem[]>([]);
+  const [items, setItems] = useState([]);
 
   useEffect(() => {
     const fetch = () => {
@@ -23,7 +22,7 @@ const SocialMediaPage: React.FC = () => {
     return () => window.removeEventListener("storage", fetch);
   }, []);
 
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [activeIndex, setActiveIndex] = useState(null);
   const close = () => setActiveIndex(null);
   const next = () =>
     setActiveIndex((i) => (i === null ? 0 : (i + 1) % items.length));
@@ -33,7 +32,7 @@ const SocialMediaPage: React.FC = () => {
     );
 
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
+    const onKey = (e) => {
       if (activeIndex === null) return;
       if (e.key === "Escape") close();
       if (e.key === "ArrowRight") next();

@@ -17,7 +17,7 @@ import HoldingPage from './pages/HoldingPage';
 import LogoPage from './pages/LogoPage';
 import PackagingPage from './pages/PackagingPage';
 import VisitingCardPage from './pages/VisitingCardPage';
-import SocialMediaPage from './pages/SocialMediaPage';
+import SocialMediaPage from './pages/SocialMediapage';
 import PersonalPage from './pages/PersonalPage';
 // Removed PortfolioDetailPage
 import AboutPage from './pages/AboutPage';
