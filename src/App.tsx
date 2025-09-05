@@ -45,7 +45,7 @@ function ScrollToSectionOnRouteChange() {
 }
 
 function App() {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => !sessionStorage.getItem('loaderShown'));
 
   useEffect(() => {
     AOS.init({
@@ -58,6 +58,7 @@ function App() {
 
   const handleLoadingFinish = () => {
     setLoading(false);
+    sessionStorage.setItem('loaderShown', 'true');
   };
 
   if (loading) {
