@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+
 import { sectionByCategory, PortfolioItem } from "../data/portfolio";
 import contentManagementService from "../services/contentManagement";
 import { AnimatePresence, motion } from "framer-motion";
@@ -6,18 +7,26 @@ import { AnimatePresence, motion } from "framer-motion";
 const SocialMediaPage: React.FC = () => {
   const baseItems: PortfolioItem[] = sectionByCategory["social-media"];
 
-  // Fetch admin-managed social-media posts stored in localStorage
-  const adminItems = useMemo(() => {
-    return contentManagementService
-      .getPortfolioItems()
-      .filter(
-        (i) =>
-          i.status === "active" &&
-          String(i.category).toLowerCase() === "social-media"
-      );
+  // Dynamic posts managed via Admin Panel
+  // added reactive fetch + storage listener
+  const [adminItems, setAdminItems] = useState<PortfolioItem[]>([]);
+  useEffect(() => {
+    const fetch = () => {
+      const latest = contentManagementService
+        .getPortfolioItems()
+        .filter(
+          i => i.status === "active" && String(i.category).toLowerCase() === "social-media"
+        );
+      setAdminItems(latest);
+    };
+    fetch();
+    window.addEventListener("storage", fetch);
+    return () => window.removeEventListener("storage", fetch);
   }, []);
 
-  const items: any[] = useMemo(() => [...adminItems, ...baseItems], [adminItems, baseItems]);
+  const items: PortfolioItem[] = useMemo(() => [...adminItems, ...baseItems], [adminItems, baseItems]);
+
+
 
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const close = () => setActiveIndex(null);
@@ -51,9 +60,13 @@ const SocialMediaPage: React.FC = () => {
             <h1 className="text-white text-3xl md:text-4xl font-extrabold">
               Social Media Post
             </h1>
-            <a href="/portfolio" className="text-orange-400 underline">
-              ← Back
-            </a>
+            <div className="flex items-center gap-4">
+              
+              <a href="/portfolio" className="text-orange-400 underline">
+                ← Back
+              </a>
+            </div>
+
           </div>
 
           {/* Masonry grid */}
@@ -121,6 +134,9 @@ const SocialMediaPage: React.FC = () => {
             </motion.div>
           )}
         </AnimatePresence>
+
+      
+
       </main>
     </div>
   );
