@@ -281,7 +281,7 @@ Best regards,
                     {info.action ? (
                       <button
                         onClick={info.action}
-                        className="text-sm sm:text-base cursor-pointer font-medium hover:underline"
+                        className="text-sm sm:text-base cursor-pointer font-medium hover:text-orange-400 hover:underline hover:decoration-orange-500 transition-colors duration-300"
                       >
                         {info.text}
                       </button>
@@ -357,7 +357,7 @@ Best regards,
                                          <motion.a
                        href="#services"
                        onClick={scrollToSection('services')}
-                       className="group flex items-center gap-3 text-gray-300 hover:text-orange-400 transition-all duration-300 cursor-pointer p-2 rounded-lg hover:bg-orange-500/5 border border-transparent hover:border-orange-500/20"
+                       className="group block w-full flex items-center gap-3 text-gray-300 hover:text-orange-400 hover:underline hover:decoration-orange-500 transition-all duration-300 cursor-pointer p-2 rounded-lg hover:bg-orange-500/5 border border-transparent hover:border-orange-500/20"
                        whileHover={{ x: 5 }}
                      >
                        <motion.div
@@ -414,10 +414,10 @@ Best regards,
                     >
                       <a
                         href={link.path}
-                        className={`text-sm sm:text-base font-normal cursor-pointer transition-all duration-300 p-2 rounded-lg ${
-                          isActive 
-                            ? 'text-orange-500 bg-orange-500/10 border border-orange-500/30 shadow-lg shadow-orange-500/20' 
-                            : 'text-gray-300 hover:text-orange-500 hover:bg-orange-500/5 border border-transparent hover:border-orange-500/20'
+                        className={`block w-full text-sm sm:text-base font-normal cursor-pointer transition-all duration-300 px-4 py-2 rounded-lg hover:translate-x-1 ${
+                          isActive
+                            ? 'text-orange-500 bg-orange-500/10 border border-orange-500/30 shadow-lg shadow-orange-500/20'
+                            : 'text-gray-300 hover:text-orange-500 hover:underline hover:decoration-orange-500 hover:bg-orange-500/5 border border-transparent hover:border-orange-500/20'
                         }`}
                       >
                         <div className="flex items-center gap-2">
@@ -528,7 +528,7 @@ Best regards,
             >
               <a 
                 href="#" 
-                className="text-gray-400 hover:text-orange-500 transition-colors duration-300 text-sm"
+                className="text-gray-400 hover:text-orange-500 hover:underline hover:decoration-orange-500 transition-colors duration-300 text-sm"
               >
                 Privacy Policy
               </a>

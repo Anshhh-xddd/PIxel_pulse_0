@@ -266,7 +266,9 @@ const ServicesPage: React.FC = () => {
               <h3 className="text-white text-3xl md:text-4xl font-bold mb-3">Ready to build something strong?</h3>
               <p className="text-gray-300 mb-6">Tell us your goals—brand, product, or launch—and we’ll propose a roadmap.</p>
               <a
-                href="/contact"
+                href="https://wa.me/919512294700"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-orange-500 to-red-500 text-black font-semibold py-3 px-6 hover:from-orange-400 hover:to-red-400 transition-colors"
               >
                 Talk to us
