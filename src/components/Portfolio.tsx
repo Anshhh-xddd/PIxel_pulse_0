@@ -13,6 +13,7 @@ const holdingItems: PortfolioItem[] = sectionByCategory.holding;
 const logoItems: PortfolioItem[] = sectionByCategory.logo;
 const packagingItems: PortfolioItem[] = sectionByCategory.packaging;
 const visitingCardItems: PortfolioItem[] = sectionByCategory.visiting;
+const socialMediaItems: PortfolioItem[] = sectionByCategory.packaging; // TODO: replace with actual social media items when available
 
 const AnimatedCard = ({ item }: { item: PortfolioItem }) => {
   return (
@@ -86,7 +87,7 @@ const Portfolio: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isHorizontal, setIsHorizontal] = useState(false);
 
-  const labels = ["Brochure", "Holding", "Logo", "Packaging", "Visiting Cards"];
+  const labels = ["Brochure", "Holding", "Logo", "Packaging", "Visiting Cards", "Social Media Post"];
 
   const sections = [
     <SectionWrapper key="brochure" title="Brochure Design" items={brochureItems} category="brochure" />,
@@ -94,7 +95,7 @@ const Portfolio: React.FC = () => {
     <SectionWrapper key="logo" title="Logo Design" items={logoItems} category="logo" />,
     <SectionWrapper key="packaging" title="Packaging Design" items={packagingItems} category="packaging" />,
     <SectionWrapper key="visiting" title="Visiting Cards" items={visitingCardItems} category="visiting" />,
-    <SectionWrapper key="packagingPage" title="Packaging" items={packagingItems} category="packaging" />,
+    <SectionWrapper key="socialMedia" title="Social Media Post" items={socialMediaItems} category="social-media" />,
   ];
 
   // Right-side SVG progress bar refs/state

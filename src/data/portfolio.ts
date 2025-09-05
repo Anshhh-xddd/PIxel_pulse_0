@@ -22,7 +22,7 @@ export type PortfolioItem = {
   title: string;
   subtitle: string;
   image: string;
-  category: 'brochure' | 'holding' | 'logo' | 'packaging' | 'visiting';
+  category: 'brochure' | 'holding' | 'logo' | 'packaging' | 'visiting' | 'social-media';
   description?: string;
 };
 
@@ -35,7 +35,7 @@ const s = (str: string) =>
 
 export const portfolioItems: PortfolioItem[] = [
   { title: 'A Textbook of Power Plant Engineering – Brochure', subtitle: 'Book Cover Design', image: Brochure, category: 'brochure', slug: s('AP Investment') },
-  { title: 'PumpTork – Product Brochure', subtitle: 'Brochure / Cover + Contact Page ', image: Brochure2, category: 'brochure', slug: s('Ashirvad Jewellers') },
+  { title: 'PumpTork – Product Brochure', subtitle: 'Brochure / Cover + Contact Page ', image: Brochure2, category: 'brochure', slug: s('Ashirvad L/lJewellers') },
   
   { title: 'Ashirvad Jewellers – Billboard 1', subtitle: 'Billboard', image: Holding1, category: 'holding', slug: s('Holding 1') },
   { title: 'Ashirvad Jewellers – Hoarding 2', subtitle: 'Billboard', image: Holding2, category: 'holding', slug: s('Holding 2') },
@@ -60,6 +60,7 @@ export const sectionByCategory: Record<PortfolioItem['category'], PortfolioItem[
   logo: portfolioItems.filter(p => p.category === 'logo'),
   packaging: portfolioItems.filter(p => p.category === 'packaging'),
   visiting: portfolioItems.filter(p => p.category === 'visiting'),
+  'social-media': portfolioItems.filter(p => p.category === 'social-media'),
 };
 
 export const getItemBySlug = (slug: string) => portfolioItems.find(p => p.slug === slug);
