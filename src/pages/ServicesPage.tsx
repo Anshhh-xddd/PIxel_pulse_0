@@ -12,19 +12,20 @@ import {
 } from "../components/ui/SkipperCard";
 
 // ----------------------
-// Helpers
+// Types & Helpers
 // ----------------------
-
-// Strong typing for service items
 interface Service {
   icon?: React.ReactNode;
   title: string;
   description: string;
   points: string[];
+  status?: "active" | "inactive";
+  type?: string;
 }
 
-// Fetch dynamic services from Admin Panel (stored in localStorage)
+// Safely fetch dynamic services from localStorage
 const getDynamicServices = (): Service[] => {
+  if (typeof window === "undefined") return [];
   try {
     const raw = localStorage.getItem("pixel_pulse_content_items");
     if (!raw) return [];
@@ -41,15 +42,21 @@ const getDynamicServices = (): Service[] => {
   }
 };
 
-// Map service data into a consistent shape
+// Map raw data → Service
 const mapToServiceShape = (svc: any): Service => ({
   icon: svc.icon || null,
   title: svc.title || "Untitled Service",
   description: svc.description || "",
-  points: svc.features || svc.points || [],
+  points: Array.isArray(svc.features)
+    ? svc.features
+    : Array.isArray(svc.points)
+    ? svc.points
+    : [],
+  status: svc.status || "active",
+  type: svc.type || "service",
 });
 
-// Default services (from static data)
+// Static services fallback
 const defaultServices: Service[] = servicesData.map(mapToServiceShape);
 
 // Animation variants
@@ -79,9 +86,7 @@ const ServicesPage: React.FC = () => {
 
   useEffect(() => {
     const dynamic = getDynamicServices();
-    if (dynamic.length > 0) {
-      setServices(dynamic);
-    }
+    if (dynamic.length > 0) setServices(dynamic);
   }, []);
 
   return (
@@ -94,8 +99,8 @@ const ServicesPage: React.FC = () => {
 
       <main className="relative z-10 pt-24 md:pt-28 pb-20">
         {/* Hero Section */}
-        <section className="pb-10 md:pb-14">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 text-center">
+        <section className="pb-10 md:pb-14 text-center">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
             <motion.h1
               className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white mb-4 leading-tight"
               initial={{ opacity: 0, y: 20 }}
@@ -118,13 +123,9 @@ const ServicesPage: React.FC = () => {
         </section>
 
         {/* Services Section */}
-        <section
-          id="services"
-          aria-labelledby="services-heading"
-          className="pb-14 md:pb-20"
-        >
+        <section id="services" aria-labelledby="services-heading" className="pb-14 md:pb-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-            <div className="text-center mb-6 md:mb-8">
+            <div className="text-center mb-8">
               <span className="inline-block text-xs font-semibold tracking-wider uppercase text-orange-400/90 bg-orange-500/10 border border-orange-500/20 rounded-full px-3 py-1">
                 Capabilities
               </span>
@@ -135,27 +136,23 @@ const ServicesPage: React.FC = () => {
                 What We Deliver
               </h2>
               <p className="text-gray-300 mt-2 max-w-2xl mx-auto">
-                From strategy to systems and execution—scalable across brand and
-                product.
+                From strategy to systems and execution—scalable across brand and product.
               </p>
             </div>
 
             <motion.div
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-8 items-stretch"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
               variants={container}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-100px" }}
             >
               {services.map((svc, idx) => {
-                const core =
-                  /Brand Strategy|Visual Identity|Website|UI\/UX/i.test(
-                    svc.title
-                  );
-                const badge = core ? "Core" : "Extended";
+                const isCore = /Brand Strategy|Visual Identity|Website|UI\/UX/i.test(svc.title);
+                const badge = isCore ? "Core" : "Extended";
 
                 return (
-                  <motion.div key={idx} variants={item} whileHover={{ y: -6 }}>
+                  <motion.div key={idx} variants={item} whileHover={{ y: -6 }} className="group">
                     <SkipperCard>
                       <SkipperCardHeader>
                         <div className="flex items-start gap-4">
@@ -163,7 +160,7 @@ const ServicesPage: React.FC = () => {
                           <div className="relative w-12 h-12">
                             <div className="absolute inset-0 rounded-lg bg-gradient-to-tr from-orange-500/20 to-red-500/20 blur-sm opacity-0 group-hover:opacity-100 transition-opacity" />
                             <div className="relative w-12 h-12 rounded-lg bg-orange-500/15 text-orange-400 flex items-center justify-center ring-1 ring-orange-500/20 group-hover:ring-orange-500/40 transition">
-                              {svc.icon}
+                              {svc.icon || <Check className="w-5 h-5" />}
                             </div>
                           </div>
 
@@ -173,7 +170,7 @@ const ServicesPage: React.FC = () => {
                               <SkipperCardTitle>{svc.title}</SkipperCardTitle>
                               <span
                                 className={`text-[10px] px-2 py-0.5 rounded-full border ${
-                                  core
+                                  isCore
                                     ? "border-orange-500/40 text-orange-400 bg-orange-500/10"
                                     : "border-gray-600 text-gray-300 bg-white/5"
                                 }`}
@@ -191,19 +188,14 @@ const ServicesPage: React.FC = () => {
                       <SkipperCardContent>
                         <ul className="space-y-2">
                           {svc.points.map((p, i) => (
-                            <li
-                              key={i}
-                              className="text-gray-300 text-sm flex items-center gap-2"
-                            >
+                            <li key={i} className="text-gray-300 text-sm flex items-center gap-2">
                               <Check className="w-3.5 h-3.5 text-orange-400" />
                               <span>{p}</span>
                             </li>
                           ))}
                         </ul>
                       </SkipperCardContent>
-                      <SkipperCardFooter>
-                        {/* Optional CTA */}
-                      </SkipperCardFooter>
+                      <SkipperCardFooter />
                     </SkipperCard>
                   </motion.div>
                 );
@@ -215,29 +207,16 @@ const ServicesPage: React.FC = () => {
         {/* Process Section */}
         <section className="pb-14 md:pb-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-            <div className="text-center mb-8 md:mb-10">
-              <h2 className="text-white text-3xl md:text-4xl font-bold">
-                How We Work
-              </h2>
-              <p className="text-gray-300 mt-2">
-                A clear path from idea to launch.
-              </p>
+            <div className="text-center mb-8">
+              <h2 className="text-white text-3xl md:text-4xl font-bold">How We Work</h2>
+              <p className="text-gray-300 mt-2">A clear path from idea to launch.</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-5 md:gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               {[
-                {
-                  t: "Discover",
-                  d: "Audit, research, and align on goals and constraints.",
-                },
-                {
-                  t: "Define",
-                  d: "Craft strategy, principles, and success metrics.",
-                },
-                {
-                  t: "Design",
-                  d: "Build identity, systems, and experience design.",
-                },
+                { t: "Discover", d: "Audit, research, and align on goals and constraints." },
+                { t: "Define", d: "Craft strategy, principles, and success metrics." },
+                { t: "Design", d: "Build identity, systems, and experience design." },
                 { t: "Deploy", d: "Develop, hand off, launch, and iterate." },
               ].map((step, i) => (
                 <motion.div
@@ -248,12 +227,8 @@ const ServicesPage: React.FC = () => {
                   transition={{ duration: 0.4, delay: i * 0.05 }}
                   className="rounded-xl border border-gray-800 bg-gray-900/50 p-6"
                 >
-                  <div className="text-orange-500 font-bold">
-                    {String(i + 1).padStart(2, "0")}
-                  </div>
-                  <div className="text-white text-xl font-semibold mt-1">
-                    {step.t}
-                  </div>
+                  <div className="text-orange-500 font-bold">{String(i + 1).padStart(2, "0")}</div>
+                  <div className="text-white text-xl font-semibold mt-1">{step.t}</div>
                   <div className="text-gray-300 mt-2 text-sm">{step.d}</div>
                 </motion.div>
               ))}
@@ -264,37 +239,18 @@ const ServicesPage: React.FC = () => {
         {/* FAQ Section */}
         <section className="pb-14 md:pb-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-            <div className="text-center mb-8 md:mb-10">
-              <h2 className="text-white text-3xl md:text-4xl font-bold">
-                FAQs
-              </h2>
-              <p className="text-gray-300 mt-2">
-                Quick answers to common questions.
-              </p>
+            <div className="text-center mb-8">
+              <h2 className="text-white text-3xl md:text-4xl font-bold">FAQs</h2>
+              <p className="text-gray-300 mt-2">Quick answers to common questions.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {[
-                {
-                  q: "How do we get started?",
-                  a: "Begin with a discovery call to align on goals, scope, and timing.",
-                },
-                {
-                  q: "Do you offer custom scopes?",
-                  a: "Absolutely—every engagement is tailored to outcomes, not just deliverables.",
-                },
-                {
-                  q: "Can you work with our team?",
-                  a: "Yes! Collaboration with your team’s context helps us move faster and smarter.",
-                },
-                {
-                  q: "What does success look like?",
-                  a: "Consistency, conversion, adoption, and long-term brand equity.",
-                },
+                { q: "How do we get started?", a: "Begin with a discovery call to align on goals, scope, and timing." },
+                { q: "Do you offer custom scopes?", a: "Absolutely—every engagement is tailored to outcomes, not just deliverables." },
+                { q: "Can you work with our team?", a: "Yes! Collaboration with your team’s context helps us move faster and smarter." },
+                { q: "What does success look like?", a: "Consistency, conversion, adoption, and long-term brand equity." },
               ].map((f, i) => (
-                <div
-                  key={i}
-                  className="rounded-xl border border-gray-800 bg-gray-900/50 p-6"
-                >
+                <div key={i} className="rounded-xl border border-gray-800 bg-gray-900/50 p-6">
                   <div className="text-white font-semibold text-lg">{f.q}</div>
                   <div className="text-gray-300 mt-2 text-sm">{f.a}</div>
                 </div>
@@ -311,8 +267,7 @@ const ServicesPage: React.FC = () => {
                 Ready to build something strong?
               </h3>
               <p className="text-gray-300 mb-6">
-                Tell us your goals—brand, product, or launch—and we’ll propose a
-                roadmap.
+                Tell us your goals—brand, product, or launch—and we’ll propose a roadmap.
               </p>
               <a
                 href="https://wa.me/919512294700"

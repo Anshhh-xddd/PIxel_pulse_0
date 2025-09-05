@@ -6,17 +6,23 @@ import { AnimatePresence, motion } from "framer-motion";
 const PackagingPage: React.FC = () => {
   // ✅ Admin-managed items
   const [adminItems, setAdminItems] = useState<PortfolioItem[]>([]);
+
   useEffect(() => {
     const fetch = () => {
-      const latest = contentManagementService
-        .getPortfolioItems()
-        .filter(
-          (i) =>
-            i.status === "active" &&
-            String(i.category).toLowerCase() === "packaging"
-        );
-      setAdminItems(latest);
+      try {
+        const latest: PortfolioItem[] = contentManagementService
+          .getPortfolioItems()
+          .filter(
+            (i: PortfolioItem) =>
+              i.status === "active" &&
+              String(i.category).toLowerCase() === "packaging"
+          );
+        setAdminItems(latest);
+      } catch (err) {
+        console.error("Failed to fetch portfolio items:", err);
+      }
     };
+
     fetch();
     window.addEventListener("storage", fetch);
     return () => window.removeEventListener("storage", fetch);
@@ -26,15 +32,20 @@ const PackagingPage: React.FC = () => {
   const [customItems, setCustomItems] = useState<PortfolioItem[]>(() => {
     try {
       const raw = localStorage.getItem("packaging_custom_items");
-      return raw ? JSON.parse(raw) : [];
-    } catch {
+      return raw ? (JSON.parse(raw) as PortfolioItem[]) : [];
+    } catch (err) {
+      console.error("Failed to parse custom items:", err);
       return [];
     }
   });
 
   const saveCustomItems = (next: PortfolioItem[]) => {
-    setCustomItems(next);
-    localStorage.setItem("packaging_custom_items", JSON.stringify(next));
+    try {
+      setCustomItems(next);
+      localStorage.setItem("packaging_custom_items", JSON.stringify(next));
+    } catch (err) {
+      console.error("Failed to save custom items:", err);
+    }
   };
 
   // ✅ Lightbox state
@@ -53,14 +64,18 @@ const PackagingPage: React.FC = () => {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (activeIndex === null) return;
+
       if (e.key === "Escape") setActiveIndex(null);
-      if (e.key === "ArrowRight")
+      if (e.key === "ArrowRight") {
         setActiveIndex((i) => (i === null ? 0 : (i + 1) % items.length));
-      if (e.key === "ArrowLeft")
+      }
+      if (e.key === "ArrowLeft") {
         setActiveIndex((i) =>
           i === null ? 0 : (i - 1 + items.length) % items.length
         );
+      }
     };
+
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [activeIndex, items.length]);
@@ -81,6 +96,7 @@ const PackagingPage: React.FC = () => {
   const addCustomCard = (e: React.FormEvent) => {
     e.preventDefault();
     if (!customTitle || !customImage) return;
+
     const newItem: PortfolioItem = {
       title: customTitle,
       subtitle: customSubtitle || "Custom",
@@ -89,8 +105,10 @@ const PackagingPage: React.FC = () => {
       slug: toSlug(customTitle),
       status: "active",
     };
+
     const next = [newItem, ...customItems];
     saveCustomItems(next);
+
     setCustomOpen(false);
     setCustomTitle("");
     setCustomSubtitle("");
@@ -292,7 +310,8 @@ const PackagingPage: React.FC = () => {
                       aria-label="Previous"
                       onClick={() =>
                         setActiveIndex(
-                          (i) => (i === null ? 0 : (i - 1 + items.length) % items.length)
+                          (i) =>
+                            (i === null ? 0 : (i - 1 + items.length) % items.length)
                         )
                       }
                       className="px-3 py-2 rounded-lg border border-gray-700 text-white hover:border-orange-500/50"
