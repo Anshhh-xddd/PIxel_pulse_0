@@ -17,6 +17,11 @@ import vs1 from '../Assets/Visiting Card-20250821T104554Z-1-001/Visiting Card/Bu
 import vs2 from '../Assets/Visiting Card-20250821T104554Z-1-001/Visiting Card/Cretolive.jpg';
 import vs3 from '../Assets/Visiting Card-20250821T104554Z-1-001/Visiting Card/Radhe Fashion.jpg';
 
+// Social Media Post images
+import Social1 from '../Assets/Creatolive.jpg';
+import Social2 from '../Assets/Proton_energy.jpg';
+import Social3 from '../Assets/Vraj_solar.jpg';
+
 export type PortfolioItem = {
   slug: string;
   title: string;
@@ -48,6 +53,11 @@ export const portfolioItems: PortfolioItem[] = [
   { title: 'Nut Sizer', subtitle: 'Flavored Roasted Almonds - Almond Sizzler', image: Box4, category: 'packaging', slug: s('nut-sizer-flavored-roasted-almonds') },
   { title: 'Dplus', subtitle: 'The Strength Behind Every Innovation', image: Box5, category: 'packaging', slug: s('dotvod-packaging-box') },
   { title: 'Crunchy Chocobar', subtitle: 'Big happiness come in small packs', image: Box6, category: 'packaging', slug: s('crunchy-chocobar') },
+
+  // Social Media Posts
+  { title: 'Creatolive', subtitle: 'Social Media Post', image: Social1, category: 'social-media', slug: s('creatolive-social') },
+  { title: 'Proton Energy', subtitle: 'Social Media Post', image: Social2, category: 'social-media', slug: s('proton-energy-social') },
+  { title: 'Vraj Solar', subtitle: 'Social Media Post', image: Social3, category: 'social-media', slug: s('vraj-solar-social') },
 
   { title: 'PumpTrock', subtitle: 'Industrial Brand', image: vs1, category: 'visiting', slug: s('PumpTrock') },
   { title: 'Rajkot Marketing', subtitle: 'Marketing Agency', image: vs2, category: 'visiting', slug: s('Rajkot Marketing') },
