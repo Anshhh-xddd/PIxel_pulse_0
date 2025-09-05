@@ -2,10 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { sectionByCategory, PortfolioItem } from '../data/portfolio';
 import contentManagementService from '../services/contentManagement';
 import { AnimatePresence, motion } from 'framer-motion';
-import image1 from '../Assets/Hordings-20250821T104541Z-1-001/Hordings/1-1.jpg';
-import image2 from '../Assets/Hordings-20250821T104541Z-1-001/Hordings/1-2.jpg';
-import image3 from '../Assets/Hordings-20250821T104541Z-1-001/Hordings/1-3.jpg';
-import image4 from '../Assets/Hordings-20250821T104541Z-1-001/Hordings/1-4.jpg';
+// Static featured hoarding images removed
 // import image5 from '../Assets/Hordings-20250821T104541Z-1-001/Hordings/Free Billboard Mockup PSD.jpg';
 // import image6 from '../Assets/Hordings-20250821T104541Z-1-001/Hordings/Free Parking Lot Billboard Mockup PSD.jpg';
 // import image7 from '../Assets/Hordings-20250821T104541Z-1-001/Hordings/Billboard Mockup with Large Size.jpg';
@@ -30,32 +27,9 @@ const HoldingPage: React.FC = () => {
       ),
     []
   );
-  // Featured extras to enrich holding page (unique slugs, clearer titles)
-  const featuredData = [
-    { image: image1, title: 'Ashirvad Jewellers – Billboard 1', subtitle: 'Billboard ' },
-    { image: image2, title: 'Ashirvad Jewellers – Hoarding 2', subtitle: 'Billboard ' },
-    { image: image3, title: 'Ashirvad Jewellers – Hoarding 3', subtitle: 'Billboard ' },
-    { image: image4, title: 'Ashirvad Jewellers – Hoarding 4', subtitle: 'Billboard ' },
-    // { image: image5, title: 'Billboard Mockup – Concept 5', subtitle: 'Billboard / Outdoor' },
-    // { image: image6, title: 'Parking Lot Billboard – Concept 6', subtitle: 'Billboard / Outdoor' },
-  ];
-  const baseTs = Date.now();
-  const featured: HoldingItem[] = featuredData.map((d, idx) => ({
-    title: d.title,
-    subtitle: d.subtitle,
-    image: d.image as string,
-    category: 'holding',
-    slug: `holding-feature-${baseTs + idx}`,
-  }));
 
-  const [customItems] = useState<HoldingItem[]>(() => {
-    try {
-      const raw = localStorage.getItem('holding_custom_items');
-      return raw ? JSON.parse(raw) : [];
-    } catch {
-      return [];
-    }
-  });
+
+
 
   const adminItems = useMemo(() => {
     return contentManagementService
@@ -64,9 +38,8 @@ const HoldingPage: React.FC = () => {
   }, []);
 
   const items: HoldingItem[] = useMemo(() => {
-    // Admin first so new content shows immediately, then featured, then customs, then defaults
-    return [...adminItems as any[], ...featured, ...customItems.slice(0, 3), ...baseItems];
-  }, [adminItems, featured, customItems, baseItems]);
+    return [...adminItems as any[], ...baseItems];
+  }, [adminItems, baseItems]);
 
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const close = () => setActiveIndex(null);

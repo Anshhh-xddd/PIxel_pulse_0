@@ -1,39 +1,36 @@
 import React, { useEffect, useMemo, useState } from "react";
-
-import { sectionByCategory, PortfolioItem } from "../data/portfolio";
+import { PortfolioItem } from "../data/portfolio";
 import contentManagementService from "../services/contentManagement";
 import { AnimatePresence, motion } from "framer-motion";
 
 const SocialMediaPage: React.FC = () => {
-  const baseItems: PortfolioItem[] = sectionByCategory["social-media"];
+  // ✅ Only fetch posts from Admin Panel
+  const [items, setItems] = useState<PortfolioItem[]>([]);
 
-  // Dynamic posts managed via Admin Panel
-  // added reactive fetch + storage listener
-  const [adminItems, setAdminItems] = useState<PortfolioItem[]>([]);
   useEffect(() => {
     const fetch = () => {
       const latest = contentManagementService
         .getPortfolioItems()
         .filter(
-          i => i.status === "active" && String(i.category).toLowerCase() === "social-media"
+          (i) =>
+            i.status === "active" &&
+            String(i.category).toLowerCase() === "social-media"
         );
-      setAdminItems(latest);
+      setItems(latest);
     };
     fetch();
     window.addEventListener("storage", fetch);
     return () => window.removeEventListener("storage", fetch);
   }, []);
 
-  const items: PortfolioItem[] = useMemo(() => [...adminItems, ...baseItems], [adminItems, baseItems]);
-
-
-
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const close = () => setActiveIndex(null);
   const next = () =>
     setActiveIndex((i) => (i === null ? 0 : (i + 1) % items.length));
   const prev = () =>
-    setActiveIndex((i) => (i === null ? 0 : (i - 1 + items.length) % items.length));
+    setActiveIndex((i) =>
+      i === null ? 0 : (i - 1 + items.length) % items.length
+    );
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -60,13 +57,9 @@ const SocialMediaPage: React.FC = () => {
             <h1 className="text-white text-3xl md:text-4xl font-extrabold">
               Social Media Post
             </h1>
-            <div className="flex items-center gap-4">
-              
-              <a href="/portfolio" className="text-orange-400 underline">
-                ← Back
-              </a>
-            </div>
-
+            <a href="/portfolio" className="text-orange-400 underline">
+              ← Back
+            </a>
           </div>
 
           {/* Masonry grid */}
@@ -108,6 +101,13 @@ const SocialMediaPage: React.FC = () => {
               </figure>
             ))}
           </div>
+
+          {/* Empty state */}
+          {items.length === 0 && (
+            <div className="text-center text-gray-400 mt-16">
+              No social media posts available. Please add from Admin Panel.
+            </div>
+          )}
         </div>
 
         {/* Lightbox */}
@@ -134,9 +134,6 @@ const SocialMediaPage: React.FC = () => {
             </motion.div>
           )}
         </AnimatePresence>
-
-      
-
       </main>
     </div>
   );

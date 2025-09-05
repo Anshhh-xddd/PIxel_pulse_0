@@ -1,124 +1,39 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { sectionByCategory, PortfolioItem } from "../data/portfolio";
+import { PortfolioItem } from "../data/portfolio";
 import contentManagementService from "../services/contentManagement";
 import { AnimatePresence, motion } from "framer-motion";
-import Brochure from "../Assets/Pakaging-20250821T104552Z-1-001/Pakaging/ALMONDS 5.jpg";
-import Brochure2 from "../Assets/Pakaging-20250821T104552Z-1-001/Pakaging/ALMONDS 6.jpg";
-import Brochure3 from "../Assets/Pakaging-20250821T104552Z-1-001/Pakaging/Box-3.jpg";
-import Brochure4 from "../Assets/Pakaging-20250821T104552Z-1-001/Pakaging/Box-4.jpg";
-import Brochure5 from "../Assets/Pakaging-20250821T104552Z-1-001/Pakaging/Box-5.jpg";
-import Brochure6 from "../Assets/Pakaging-20250821T104552Z-1-001/Pakaging/Box-6.jpg";
-import Brochure7 from "../Assets/Pakaging-20250821T104552Z-1-001/Pakaging/Box-7.jpg";
-import Brochure8 from "../Assets/Pakaging-20250821T104552Z-1-001/Pakaging/box2.jpg";
-import Brochure9 from "../Assets/Pakaging-20250821T104552Z-1-001/Pakaging/Kulfi_packaging (1).jpg";
 
 const PackagingPage: React.FC = () => {
-  // Exclude specific items from brochure list
-  const excludedSlugs = ["ap-investment", "ashirvad-jewellers", "cake-delight"];
-  const excludedTitles = [
-    "AP Investment",
-    "Ashirvad Jewellers",
-    "Cake & Delight",
-  ];
-  const baseItems: PortfolioItem[] = sectionByCategory.brochure.filter(
-    (i) => !excludedSlugs.includes(i.slug) && !excludedTitles.includes(i.title)
-  );
-  // Extra brochure-style cards (using existing assets) to enrich the page
-  const featured: PortfolioItem[] = [
-    {
-      title: "Almonds",
-      subtitle: "Packaging",
-      image: Brochure,
-      slug: "Almonds-" + Date.now(),
-      description:
-        "Product packaging design for 'The Nut Sixer' flavored roasted almonds. The pouch features a warm orange and cream color scheme with a cricket theme illustration, highlighting premium flavored roasted almonds (Almond Sizzler).",
-    } as any,
-    {
-      title: "Almonds",
-      subtitle: "Packaging",
-      image: Brochure2,
-      slug: "Almonds-" + Date.now(),
-      description:
-        "Product packaging design for 'The Nut Sixer' flavored roasted almonds. The pouch features a blue and white color scheme with a cricket theme illustration, emphasizing high-quality flavored roasted almonds (Almond Sizzler).",
-    } as any,
-    {
-      title: "Dplus",
-      subtitle: "Packaging",
-      image: Brochure3,
-      slug: "Dplus-" + Date.now(),
-      description:
-        "Product packaging design for 'Dplus' Architectural Hardware Fittings. The box features a premium red and black color scheme with a gold accent, showcasing a modern and professional look for hardware fitting products.",
-    } as any,
-    {
-      title: "Dplus",
-      subtitle: "Packaging",
-      image: Brochure4,
-      slug: "Dplus-GoldBlack-" + Date.now(),
-    "description": "Premium packaging design for 'Dplus' Architectural Hardware Fittings. The box features a black and gold combination with a bold arrow design, reflecting strength and quality in construction fittings."
-    } as any,
-    {
-      title: "Architectural Hardware Fittings",
-    subtitle: "Packaging",
-    image: Brochure5,
-    slug: "Dplus-RedYellow-" + Date.now(),
-    description: "Product packaging for 'Dplus' Architectural Hardware Fittings. The red box with a yellow accent creates a modern and energetic design, emphasizing durability and architectural precision."
-    } as any,
-    {
-      title: "Architectural Hardware Fittings",
-    subtitle: "Packaging",
-    image: Brochure6,
-    slug: "Dplus-CreamRed-" + Date.now(),
-    description: "Stylish packaging for 'Dplus' Architectural Hardware Fittings. The cream and red box with geometric accents highlights sophistication and reliability for hardware products."
-    } as any,
-    {
-      title: "Architectural Hardware Fittings",
-      subtitle: "Packaging",
-      image: Brochure7,
-      slug: "Dplus-NavyBlue-" + Date.now(),
-      description:
-        "Elegant packaging design for 'Dplus' Architectural Hardware Fittings. The navy blue and gold accents on a long rectangular box give a premium and professional look.",
-    } as any,
-    {
-      title: "Architectural Hardware Fittings",
-      subtitle: "Packaging",
-      image: Brochure8,
-      slug: "Dplus-AquaBlue-" + Date.now(),
-    description:
-      "Fresh packaging design for 'Dplus' Architectural Hardware Fittings. The aqua blue shade with subtle patterns conveys innovation and modernity in hardware solutions.",
+  // ✅ Only admin + custom items, no static/manual content
+  const adminItems = useMemo(() => {
+    return contentManagementService
+      .getPortfolioItems()
+      .filter(
+        (i) =>
+          i.status === "active" &&
+          String(i.category).toLowerCase() === "packaging"
+      ) as PortfolioItem[];
+  }, []);
 
-    } as any,
-    {
-      title: "Crunchy Chocobar",
-      subtitle: "Ice Cream Packaging",
-      image: Brochure9,
-      slug: "Aditya-Chocobar-" + Date.now(),
-      description:
-        "Packaging design for 'Aditya Ice Cream' Crunchy Chocobar. The wrapper features rich chocolate tones with a tempting chocobar visual, accompanied by the tagline 'Big happiness comes in small packs'.",
-    } as any,
-  ];
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const [customOpen, setCustomOpen] = useState(false);
-  const [customTitle, setCustomTitle] = useState("");
-  const [customSubtitle, setCustomSubtitle] = useState("");
-  const [customImage, setCustomImage] = useState("");
   const [customItems, setCustomItems] = useState<PortfolioItem[]>(() => {
     try {
-      const raw = localStorage.getItem("brochure_custom_items");
+      const raw = localStorage.getItem("packaging_custom_items");
       return raw ? JSON.parse(raw) : [];
     } catch {
       return [];
     }
   });
 
-  const adminItems = useMemo(() => {
-    return contentManagementService
-      .getPortfolioItems()
-      .filter(i => (i.status === 'active') && String(i.category).toLowerCase() === 'packaging') as unknown as PortfolioItem[];
-  }, []);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [customOpen, setCustomOpen] = useState(false);
+  const [customTitle, setCustomTitle] = useState("");
+  const [customSubtitle, setCustomSubtitle] = useState("");
+  const [customImage, setCustomImage] = useState("");
 
+  // ✅ Final items
   const items: PortfolioItem[] = useMemo(() => {
-    return [...adminItems as any[], ...featured, ...customItems, ...baseItems];
-  }, [adminItems, featured, customItems, baseItems]);
+    return [...adminItems, ...customItems];
+  }, [adminItems, customItems]);
 
   const close = () => setActiveIndex(null);
   const next = () =>
@@ -128,6 +43,7 @@ const PackagingPage: React.FC = () => {
       i === null ? 0 : (i - 1 + items.length) % items.length
     );
 
+  // ✅ Keyboard navigation
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (activeIndex === null) return;
@@ -142,7 +58,7 @@ const PackagingPage: React.FC = () => {
   const saveCustomItems = (nextItems: PortfolioItem[]) => {
     setCustomItems(nextItems);
     try {
-      localStorage.setItem("brochure_custom_items", JSON.stringify(nextItems));
+      localStorage.setItem("packaging_custom_items", JSON.stringify(nextItems));
     } catch {}
   };
 
@@ -162,7 +78,7 @@ const PackagingPage: React.FC = () => {
       title: customTitle,
       subtitle: customSubtitle || "Custom",
       image: customImage,
-      category: "brochure",
+      category: "packaging",
       slug: toSlug(customTitle),
     } as any;
     const next = [newItem, ...customItems];
@@ -180,6 +96,7 @@ const PackagingPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-black relative overflow-hidden">
+      {/* Background gradients */}
       <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div>
       <div className="absolute inset-0 bg-gradient-to-t from-orange-500/10 via-transparent to-transparent"></div>
       <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 via-transparent to-orange-500/5"></div>
@@ -187,21 +104,14 @@ const PackagingPage: React.FC = () => {
 
       <main className="relative z-10 pt-24 md:pt-28 pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+          {/* Page header */}
           <div className="flex items-center justify-between mb-8">
             <h1 className="text-white text-3xl md:text-4xl font-extrabold">
-              Brochure Design
+              Packaging Design
             </h1>
-            <div className="flex items-center gap-3">
-              <a href="/portfolio" className="text-orange-400 underline">
-                ← Back
-              </a>
-              <a
-                href="/portfolio/packaging"
-                className="text-orange-400 underline"
-              >
-                View All Packaging
-              </a>
-            </div>
+            <a href="/portfolio" className="text-orange-400 underline">
+              ← Back
+            </a>
           </div>
 
           {/* Masonry grid */}
@@ -216,7 +126,7 @@ const PackagingPage: React.FC = () => {
                 onKeyDown={(e) => {
                   if (e.key === "Enter" || e.key === " ") setActiveIndex(i);
                 }}
-                className="mb-4 md:mb-6 break-inside-avoid relative rounded-2xl overflow-hidden border border-gray-800 bg-gray-900/50 hover:border-orange-500/40 transition select-none shadow-lg hover:shadow-orange-500/10"
+                className="mb-4 md:mb-6 break-inside-avoid relative rounded-2xl overflow-hidden border border-gray-800 bg-gray-900/50 hover:border-orange-500/40 transition select-none shadow-lg hover:shadow-orange-500/10 group"
               >
                 <div className="relative w-full">
                   <img
@@ -225,10 +135,10 @@ const PackagingPage: React.FC = () => {
                     loading="lazy"
                     decoding="async"
                     className="img-fade block w-full h-auto object-cover"
-                    onLoad={(e) => e.currentTarget.classList.add('is-loaded')}
+                    onLoad={(e) => e.currentTarget.classList.add("is-loaded")}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  {/* Remove for customs */}
+                  {/* Remove button only for custom items */}
                   {customItems.find((ci) => ci.slug === p.slug) && (
                     <button
                       onClick={(e) => {
@@ -248,27 +158,17 @@ const PackagingPage: React.FC = () => {
                   <div className="text-gray-400 text-xs font-medium mt-0.5">
                     {p.subtitle}
                   </div>
-                  {(p as any).description && (
-                    <div className="text-gray-300 text-sm mt-2 leading-relaxed">
-                      {(p as any).description}
-                    </div>
-                  )}
-                  {(p as any).details && Array.isArray((p as any).details) && (
-                    <ul className="flex flex-wrap gap-2 mt-3 text-[11px] text-gray-400">
-                      {((p as any).details as string[]).map((d, idx) => (
-                        <li
-                          key={idx}
-                          className="px-2 py-0.5 border border-gray-700 rounded"
-                        >
-                          {d}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
                 </figcaption>
               </figure>
             ))}
           </div>
+
+          {/* Empty state */}
+          {items.length === 0 && (
+            <div className="text-center text-gray-400 mt-16">
+              No packaging designs available. Please add from Admin Panel.
+            </div>
+          )}
         </div>
 
         {/* Add Custom Modal */}
