@@ -23,7 +23,8 @@ import AboutPage from './pages/AboutPage';
 import PortfolioCategoryPage from './pages/PortfolioCategoryPage';
 import AdminStatsPage from './pages/AdminStatsPage';
 import AdminPanel from './pages/AdminPanel';
-import SocialMediaPage from './pages/SocialMediapage';
+// import SocialMediaPage from './pages/SocialMediapage';
+import SocialMediaPage from './pages/SocialMedia';
 
 function ScrollToSectionOnRouteChange() {
   const location = useLocation();
