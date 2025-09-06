@@ -17,14 +17,13 @@ import HoldingPage from './pages/HoldingPage';
 import LogoPage from './pages/LogoPage';
 import PackagingPage from './pages/PackagingPage';
 import VisitingCardPage from './pages/VisitingCardPage';
-// import SocialMediaPage from './pages/SocialMediaPage';
 import PersonalPage from './pages/PersonalPage';
 // Removed PortfolioDetailPage
 import AboutPage from './pages/AboutPage';
 import PortfolioCategoryPage from './pages/PortfolioCategoryPage';
 import AdminStatsPage from './pages/AdminStatsPage';
 import AdminPanel from './pages/AdminPanel';
-import SocialMediaPage from './pages/SocialMediaPage';
+import SocialMediaPage from './pages/SocialMediapage';
 
 function ScrollToSectionOnRouteChange() {
   const location = useLocation();
