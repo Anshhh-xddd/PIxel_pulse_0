@@ -43,8 +43,8 @@ export const portfolioItems: PortfolioItem[] = [
   { title: 'PumpTork – Product Brochure', subtitle: 'Brochure / Cover + Contact Page ', image: Brochure2, category: 'brochure', slug: s('Ashirvad L/lJewellers') },
   
   { title: 'Ashirvad Jewellers – Billboard 1', subtitle: 'Billboard', image: Holding1, category: 'holding', slug: s('Holding 1') },
-  { title: 'Ashirvad Jewellers – Hoarding 2', subtitle: 'Billboard', image: Holding2, category: 'holding', slug: s('Holding 2') },
-  { title: 'Ashirvad Jewellers – Hoarding 3', subtitle: 'Billboard', image: Holding3, category: 'holding', slug: s('Holding 3') },
+  { title: 'Ashirvad Jewellers – Billboard 2', subtitle: 'Billboard', image: Holding2, category: 'holding', slug: s('Holding 2') },
+  { title: 'Ashirvad Jewellers – Billboard 3', subtitle: 'Billboard', image: Holding3, category: 'holding', slug: s('Holding 3') },
 
   { title: 'Vrindavan Chaat Bhandar', subtitle: 'Food & Beverage', image: Logo5, category: 'logo', slug: s('Vrindavan Chaat Bhandar') },
   { title: 'Radhe Fashion', subtitle: 'Fashion & Lifestyle', image: Logo7, category: 'logo', slug: s('Radhe Fashion') },
@@ -59,9 +59,13 @@ export const portfolioItems: PortfolioItem[] = [
   { title: 'Proton Energy', subtitle: 'Social Media Post', image: Social2, category: 'social-media', slug: s('proton-energy-social') },
   { title: 'Vraj Solar', subtitle: 'Social Media Post', image: Social3, category: 'social-media', slug: s('vraj-solar-social') },
 
-  { title: 'PumpTrock', subtitle: 'Industrial Brand', image: vs1, category: 'visiting', slug: s('PumpTrock') },
-  { title: 'Rajkot Marketing', subtitle: 'Marketing Agency', image: vs2, category: 'visiting', slug: s('Rajkot Marketing') },
-  { title: 'Shreeji Packaging', subtitle: 'Packaging Solutions', image: vs3, category: 'visiting', slug: s('Shreeji Packaging') },
+  { title: 'Shakti Industries', subtitle: 'Industrial Brand', image: vs1, category: 'visiting', slug: s('PumpTrock') },
+  { title: 'Creatolive', subtitle: 'Marketing Agency', image: vs2, category: 'visiting', slug: s('Rajkot Marketing') },
+  { title: 'Radhe Fashion', subtitle: 'Packaging Solutions', image: vs3, category: 'visiting', slug: s('Shreeji Packaging') },
+
+  { title: 'Shakti Industries', subtitle: 'Industrial Brand', image: vs1, category: 'social-media', slug: s('PumpTrock') },
+  { title: 'Creatolive', subtitle: 'Marketing Agency', image: vs2, category: 'social-media', slug: s('Rajkot Marketing') },
+  { title: 'Radhe Fashion', subtitle: 'Packaging Solutions', image: vs3, category: 'social-media', slug: s('Shreeji Packaging') },
 ];
 
 export const sectionByCategory: Record<PortfolioItem['category'], PortfolioItem[]> = {
