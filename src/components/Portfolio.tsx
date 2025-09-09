@@ -7,6 +7,7 @@ import { sectionByCategory, PortfolioItem } from "../data/portfolio";
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
+/** ===== Data ===== */
 const brochureItems: PortfolioItem[] = sectionByCategory.brochure;
 const holdingItems: PortfolioItem[] = sectionByCategory.holding;
 const logoItems: PortfolioItem[] = sectionByCategory.logo;
@@ -14,34 +15,37 @@ const packagingItems: PortfolioItem[] = sectionByCategory.packaging;
 const visitingCardItems: PortfolioItem[] = sectionByCategory.visiting;
 const socialMediaItems: PortfolioItem[] = sectionByCategory["social-media"];
 
+/** ===== Card ===== */
 const AnimatedCard = ({ item }: { item: PortfolioItem }) => {
   return (
     <motion.div
       className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 bg-gray-900/60 backdrop-blur-xl border border-gray-800 hover:border-gray-700"
-      whileHover={{ scale: 1.03, transition: { duration: 0.28 } }}
+      whileHover={{ scale: 1.02, transition: { duration: 0.24 } }}
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.55, ease: "easeOut" }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
       viewport={{ once: true, margin: "-10% 0px -10% 0px" }}
       role="article"
       aria-label={item.title}
     >
-      <div className="relative w-full h-56 sm:h-64 md:h-72 overflow-hidden bg-black">
+      {/* Image wrapper: stable aspect for mobile, taller for larger screens */}
+      <div className="relative w-full aspect-[16/10] sm:aspect-[16/9] md:aspect-[16/8] overflow-hidden bg-black">
         <img
           src={item.image}
           alt={item.title}
           loading="lazy"
           decoding="async"
           className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04] will-change-transform"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </div>
 
       <div className="p-4 sm:p-5">
-        <div className="text-white text-base sm:text-lg font-semibold leading-snug line-clamp-2">
+        <div className="text-white text-[15px] sm:text-lg font-semibold leading-snug line-clamp-2">
           {item.title}
         </div>
-        <div className="text-gray-400 text-[12px] sm:text-xs font-medium mt-1">
+        <div className="text-gray-400 text-xs sm:text-[13px] font-medium mt-1">
           {item.subtitle}
         </div>
       </div>
@@ -49,6 +53,7 @@ const AnimatedCard = ({ item }: { item: PortfolioItem }) => {
   );
 };
 
+/** ===== Section wrapper (mobile-first) ===== */
 const SectionWrapper = ({
   title,
   items,
@@ -58,10 +63,10 @@ const SectionWrapper = ({
   items: PortfolioItem[];
   category?: string;
 }) => (
-  <div className="w-screen h-full flex flex-col items-center justify-center px-6 sm:px-8">
-    <div className="flex items-center justify-between w-full max-w-6xl mb-6 sm:mb-8">
+  <div className="w-full h-full flex flex-col items-center justify-center px-4 sm:px-6 md:px-8 mt-4 sm:mt-0">
+    <div className="flex items-center justify-between w-full max-w-6xl mb-5 sm:mb-8">
       <motion.h2
-        className="text-3xl sm:text-4xl font-bold tracking-tight text-orange-400"
+        className="text-[22px] sm:text-3xl md:text-4xl font-bold tracking-tight text-orange-400"
         initial={{ opacity: 0, y: -22 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
@@ -83,7 +88,7 @@ const SectionWrapper = ({
         return (
           <a
             href={href}
-            className="inline-flex items-center gap-2 text-sm font-medium text-orange-300 hover:text-orange-200 underline underline-offset-4 decoration-1"
+            className="inline-flex items-center gap-2 text-[13px] sm:text-sm font-medium text-orange-300 hover:text-orange-200 underline underline-offset-4 decoration-1"
             aria-label={`View all ${title}`}
           >
             View all
@@ -96,7 +101,7 @@ const SectionWrapper = ({
     </div>
 
     {/* Preview only first three items; full list via View all */}
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-6xl w-full">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 max-w-6xl w-full">
       {items.slice(0, 3).map((item, i) => (
         <AnimatedCard key={`${item.title}-${i}`} item={item} />
       ))}
@@ -104,6 +109,7 @@ const SectionWrapper = ({
   </div>
 );
 
+/** ===== Main Portfolio ===== */
 const Portfolio: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const panelsRef = useRef<(HTMLDivElement | null)[]>([]);
@@ -121,6 +127,7 @@ const Portfolio: React.FC = () => {
     []
   );
 
+  // sections built from current data (dependency lists included to avoid stale values)
   const sections = useMemo(
     () => [
       <SectionWrapper key="brochure" title="Brochure Design" items={brochureItems} category="brochure" />,
@@ -130,7 +137,7 @@ const Portfolio: React.FC = () => {
       <SectionWrapper key="visiting" title="Visiting Cards" items={visitingCardItems} category="visiting" />,
       <SectionWrapper key="socialMedia" title="Social Media Post" items={socialMediaItems} category="social-media" />,
     ],
-    []
+    [brochureItems, holdingItems, logoItems, packagingItems, visitingCardItems, socialMediaItems]
   );
 
   const goToPanel = (index: number) => {
@@ -140,22 +147,21 @@ const Portfolio: React.FC = () => {
 
     const totalPanels = panels.length;
     const scrollDistance = containerRef.current.offsetWidth * (totalPanels - 1);
-    const y =
-      containerRef.current.offsetTop + (scrollDistance * (index / (totalPanels - 1)));
+    const y = containerRef.current.offsetTop + (scrollDistance * (index / (totalPanels - 1)));
 
     gsap.to(window, { scrollTo: { y }, duration: 0.8, ease: "power2.inOut" });
   };
 
-  // Track breakpoint
+  /** ===== Breakpoint tracking (lg and up triggers horizontal) ===== */
   useEffect(() => {
-    const mql = window.matchMedia("(min-width: 1024px)"); // lg and up
+    const mql = window.matchMedia("(min-width: 1024px)");
     const update = () => setIsHorizontal(mql.matches);
     update();
     mql.addEventListener("change", update);
     return () => mql.removeEventListener("change", update);
   }, []);
 
-  // Align initial scroll to container on enter (horizontal only)
+  /** ===== Align initial scroll when entering horizontal mode ===== */
   useEffect(() => {
     if (!isHorizontal || !containerRef.current) return;
     const id = window.setTimeout(() => {
@@ -164,14 +170,13 @@ const Portfolio: React.FC = () => {
     return () => window.clearTimeout(id);
   }, [isHorizontal]);
 
-  // Horizontal scroll animation & right-side path sync
+  /** ===== Horizontal scroll & progress sync (only lg+) ===== */
   useEffect(() => {
     if (!isHorizontal || !containerRef.current) return;
 
     const panels = panelsRef.current.filter(Boolean) as HTMLDivElement[];
     const totalPanels = panels.length;
     const scrollDistance = containerRef.current.offsetWidth * (totalPanels - 1);
-
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const ctx = gsap.context(() => {
@@ -204,7 +209,7 @@ const Portfolio: React.FC = () => {
     return () => ctx.revert();
   }, [isHorizontal]);
 
-  // Compute right-side markers on mount/resize
+  /** ===== Compute right-side markers (lg+) ===== */
   useEffect(() => {
     const compute = () => {
       if (!rightPathRef.current) return;
@@ -234,17 +239,19 @@ const Portfolio: React.FC = () => {
   }, [labels]);
 
   return (
-    <section className="relative bg-gradient-to-br from-gray-900 via-black to-gray-900">
+    <section className="relative overflow-x-hidden bg-gradient-to-br from-gray-900 via-black to-gray-900">
+      {/* Mobile spacer: respects iOS safe area */}
+      <div className="block lg:hidden h-4 sm:h-6 pt-[env(safe-area-inset-top)]" />
+
       {isHorizontal ? (
+        /* ===== Horizontal (lg+) ===== */
         <div
           ref={containerRef}
           className="relative h-screen w-screen overflow-hidden"
           aria-label="Portfolio showcase"
         >
-          <div
-            className="flex h-full"
-            style={{ width: `${sections.length * 100}vw` }}
-          >
+          {/* Panels */}
+          <div className="flex h-full" style={{ width: `${sections.length * 100}vw` }}>
             {sections.map((content, index) => (
               <div
                 key={index}
@@ -258,8 +265,8 @@ const Portfolio: React.FC = () => {
             ))}
           </div>
 
-          {/* Navigation markers + animated SVG progress bar */}
-          <div className="absolute right-4 sm:right-6 top-1/2 -translate-y-1/2 z-30 select-none">
+          {/* Right-side progress only on lg+ */}
+          <div className="hidden lg:block absolute right-4 sm:right-6 top-1/2 -translate-y-1/2 z-30 select-none">
             <svg
               ref={rightSvgRef}
               viewBox="0 0 60 260"
@@ -280,7 +287,7 @@ const Portfolio: React.FC = () => {
                 </filter>
               </defs>
 
-              {/* Track - subtle S curve */}
+              {/* Track */}
               <path
                 d="M30,10 C15,60 45,100 30,150 C15,190 45,220 30,250"
                 stroke="rgba(255,255,255,0.15)"
@@ -306,7 +313,7 @@ const Portfolio: React.FC = () => {
                 <animate attributeName="r" values="6;7;6" dur="1.2s" repeatCount="indefinite" />
               </circle>
 
-              {/* Markers */}
+              {/* Clickable markers */}
               {rightMarkerPoints.map((pt, idx) => (
                 <g
                   key={idx}
@@ -332,8 +339,9 @@ const Portfolio: React.FC = () => {
           </div>
         </div>
       ) : (
-        <div className="relative w-full py-12 sm:py-14 md:py-16">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 space-y-16 sm:space-y-20 md:space-y-24">
+        /* ===== Vertical (mobile / tablet) ===== */
+        <div className="relative w-full pt-10 sm:pt-12 md:pt-14 pb-12 sm:pb-16 md:pb-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 space-y-12 sm:space-y-16 md:space-y-20">
             {sections.map((content, index) => (
               <div key={index} className="w-full">
                 {content}
