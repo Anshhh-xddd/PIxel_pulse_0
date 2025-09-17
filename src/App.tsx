@@ -25,6 +25,7 @@ import AdminStatsPage from './pages/AdminStatsPage';
 import AdminPanel from './pages/AdminPanel';
 // import SocialMediaPage from './pages/SocialMediapage';
 import SocialMediaPage from './pages/SocialMedia';
+import GrowInvestPage from './pages/GrowInvestPage';
 
 function ScrollToSectionOnRouteChange() {
   const location = useLocation();
@@ -75,6 +76,7 @@ function App() {
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<HomePage />} />
+          <Route path="/grow-invest" element={<GrowInvestPage />} />
           <Route path="/services" element={<ServicesPage />} />
           <Route path="/portfolio" element={<PortfolioPage />} />
           <Route path="/portfolio/brochure" element={<BrochurePage />} />
